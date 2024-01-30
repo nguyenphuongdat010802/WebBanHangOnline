@@ -1,0 +1,239 @@
+﻿@model IEnumerable<WebBanHangOnline.Models.ShoppingCartItem>
+
+
+
+@using WebBanHangOnline.Common
+
+
+
+
+
+<table class="table">
+    <tr class="text-center">
+        <th>STT</th>
+        <th>Ảnh sản phẩm</th>
+        <th>Tên sản phẩm</th>
+        <th>Danh mục</th>
+        <th>Giá</th>
+
+        <th style="width:100px;">Số lượng</th>
+
+        <th>Tồn kho</th> <!-- Thêm cột tồn kho -->
+
+        <th>Thành tiền</th>
+        <th style="width:200px;">
+
+        </th>
+    </tr>
+    @if (Model != null && Model.Any())
+    {
+        var i = 0;
+        var tongtien = decimal.Zero;
+        foreach (var item in Model)
+        {
+
+            //Giửa lại code trong này
+            tongtien += item.TotalPrice;
+
+
+
+
+            <tr class="text-center" id="trow_@item.ProductId">
+                <td>@(i+1)</td>
+                <td><img src="@item.ProductImg" width="60" /></td>
+                <td>
+                    <a href="/chi-tiet/@item.Alias-p@(item.ProductId)">
+                        @item.ProductName
+                    </a>
+                </td>
+                <td>@item.CategoryName</td>
+                <td>@Common.FormatNumber(item.Price, 0)</td>
+                @*<td><input type="number" class="form-control" id="Quantity_@item.ProductId" value="@item.Quantity" min="1" /></td>*@
+                <td>
+                    <input type="number" class="form-control" id="Quantity_@item.ProductId" value="@item.Quantity" min="1" data-inventory="@item.Inventory" />
+                </td>
+
+
+                <!-- Thêm cột tồn kho -->
+                <td>
+                    @if (item.Inventory <= 0 || item.Quantity >= item.Inventory)
+                    {
+                        <span class="text-danger">Hết hàng</span>
+                    }
+                    else
+                    {
+                        @item.Inventory
+                    }
+                </td>
+
+
+
+
+
+
+
+                <th>@Common.FormatNumber(item.TotalPrice, 2)</th>
+                <td>
+                    <a href="#" data-id="@item.ProductId" class="btn btn-sm btn-danger btnDelete">Xóa</a>
+                    <a href="#" data-id="@item.ProductId" class="btn btn-sm btn-success btnUpdate">Cập nhật</a>
+                </td>
+            </tr>
+            i++;
+
+
+
+        }
+        <tr>
+            <th colspan="6" class="text-right">Tổng: </th>
+            <th class="text-center">@Common.FormatNumber(tongtien, 0)</th>
+            <th></th>
+        </tr>
+
+    }
+    else
+    {
+        <tr>
+            <th colspan="7">Không có sản phẩm trong giỏ hàng!!</th>
+        </tr>
+    }
+</table>
+
+
+@*<script>
+    function validateQuantity(productId) {
+        // Lấy đối tượng input số dựa vào productId
+        var inputElement = document.getElementById("Quantity_" + productId);
+        // Lấy giá trị hiện tại của input
+        var currentQuantity = parseInt(inputElement.value);
+        // Lấy giá trị tối đa cho phép (lấy từ thuộc tính data-inventory)
+        var maxQuantity = parseInt(inputElement.getAttribute("data-inventory"));
+
+        // Kiểm tra nếu số lượng hiện tại lớn hơn số lượng tối đa
+        if (currentQuantity > maxQuantity) {
+            // Nếu lớn hơn, đặt giá trị của input là giá trị tối đa
+            inputElement.value = maxQuantity;
+        }
+
+        // Lấy giá trị hiện tại của tồn kho
+        var inventoryElement = document.getElementById("Inventory_" + productId);
+        var currentInventory = parseInt(inventoryElement.innerText);
+
+        // Tính toán giá trị mới của tồn kho
+        var newInventory = currentInventory + (currentQuantity - 1); // Trừ đi 1 vì đã tăng Quantity lên
+        inventoryElement.innerText = newInventory;
+
+        // Lấy đối tượng nút "Cập nhật" dựa vào productId
+        var updateButton = document.getElementById("Update_" + productId);
+
+        // Kiểm tra nếu số lượng hiện tại là 0 hoặc không có tồn kho
+        if (currentQuantity === 0 || newInventory === 0) {
+            // Nếu là 0, vô hiệu hóa nút "Cập nhật"
+            updateButton.disabled = true;
+        } else {
+            // Ngược lại, kích hoạt nút "Cập nhật"
+            updateButton.disabled = false;
+        }
+    }
+
+    // Gắn sự kiện onchange cho tất cả các input số
+    var quantityInputs = document.querySelectorAll('input[type="number"]');
+    quantityInputs.forEach(function (input) {
+        input.addEventListener('change', function () {
+            // Lấy productId từ id của input
+            var productId = input.id.split('_')[1];
+            // Gọi hàm kiểm tra số lượng
+            validateQuantity(productId);
+        });
+    });
+</script>*@
+
+
+
+@*<script>
+        function validateQuantity(productId) {
+            // Lấy đối tượng input số dựa vào productId
+            var inputElement = document.getElementById("Quantity_" + productId);
+            // Lấy giá trị hiện tại của input
+            var currentQuantity = parseInt(inputElement.value);
+            // Lấy giá trị tối đa cho phép (lấy từ thuộc tính data-inventory)
+            var maxQuantity = parseInt(inputElement.getAttribute("data-inventory"));
+
+            // Kiểm tra nếu số lượng hiện tại lớn hơn số lượng tối đa
+            if (currentQuantity > maxQuantity) {
+                // Nếu lớn hơn, đặt giá trị của input là giá trị tối đa
+                inputElement.value = maxQuantity;
+            }
+
+            // Lấy đối tượng nút "Cập nhật" dựa vào productId
+            var updateButton = document.getElementById("Update_" + productId);
+
+            // Kiểm tra nếu số lượng hiện tại là 0 hoặc không có tồn kho
+            if (currentQuantity === 0 || maxQuantity === 0) {
+                // Nếu là 0, vô hiệu hóa nút "Cập nhật"
+                updateButton.disabled = true;
+            } else {
+                // Ngược lại, kích hoạt nút "Cập nhật"
+                updateButton.disabled = false;
+            }
+
+            // Lấy giá trị hiện tại của tồn kho
+            var inventoryElement = document.getElementById("Inventory_" + productId);
+            var currentInventory = parseInt(inventoryElement.innerText);
+
+            // Giảm giá trị tồn kho khi tăng Quantity
+            var newInventory = currentInventory - (currentQuantity - 1); // Trừ đi 1 vì đã tăng Quantity lên
+            inventoryElement.innerText = newInventory;
+        }
+
+        // Gắn sự kiện onchange cho tất cả các input số
+        var quantityInputs = document.querySelectorAll('input[type="number"]');
+        quantityInputs.forEach(function (input) {
+            input.addEventListener('change', function () {
+                // Lấy productId từ id của input
+                var productId = input.id.split('_')[1];
+                // Gọi hàm kiểm tra số lượng
+                validateQuantity(productId);
+            });
+        });
+    </script>*@
+
+
+<script>
+        function validateQuantity(productId) {
+            // Lấy đối tượng input số dựa vào productId
+            var inputElement = document.getElementById("Quantity_" + productId);
+            // Lấy giá trị hiện tại của input
+            var currentQuantity = parseInt(inputElement.value);
+            // Lấy giá trị tối đa cho phép (lấy từ thuộc tính data-inventory)
+            var maxQuantity = parseInt(inputElement.getAttribute("data-inventory"));
+
+            // Kiểm tra nếu số lượng hiện tại lớn hơn số lượng tối đa
+            if (currentQuantity > maxQuantity) {
+                // Nếu lớn hơn, đặt giá trị của input là giá trị tối đa
+                inputElement.value = maxQuantity;
+            }
+
+            // Lấy đối tượng nút "Cập nhật" dựa vào productId
+            var updateButton = document.getElementById("Update_" + productId);
+
+            // Kiểm tra nếu số lượng hiện tại là 0
+            if (currentQuantity === 0) {
+                // Nếu là 0, vô hiệu hóa nút "Cập nhật"
+                updateButton.disabled = true;
+            } else {
+                // Ngược lại, kích hoạt nút "Cập nhật"
+                updateButton.disabled = false;
+            }
+        }
+
+        // Gắn sự kiện onchange cho tất cả các input số
+        var quantityInputs = document.querySelectorAll('input[type="number"]');
+        quantityInputs.forEach(function (input) {
+            input.addEventListener('change', function () {
+                // Lấy productId từ id của input
+                var productId = input.id.split('_')[1];
+                // Gọi hàm kiểm tra số lượng
+                validateQuantity(productId);
+            });
+        });
+    </script>

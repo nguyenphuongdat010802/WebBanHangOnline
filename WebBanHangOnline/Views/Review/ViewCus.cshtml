@@ -1,0 +1,77 @@
+﻿@model WebBanHangOnline.Models.EF.Order
+@using PagedList;
+@{
+    ViewBag.Title = "Chi tiết đơn hàng";
+}
+
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css">
+<!--Slider-->
+<style>
+    .news_section_container {
+        margin-top: 180px;
+    }
+
+    .row-item-new {
+        margin-bottom: 20px;
+    }
+
+    .title-news {
+        font-size: 24px;
+        border-bottom: 1px solid;
+        padding: 15px 0;
+        margin-bottom: 25px;
+    }
+
+    .img-box img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+</style>
+
+
+
+<div class="container news_section_container">
+
+    
+    <div class="row">
+
+        <!-- Main content -->
+        <section class="content">
+
+            <!-- Default box -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Chi tiết đơn hàng</h2>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Tổng tiền</label>
+                            <p class="form-control">@WebBanHangOnline.Common.Common.FormatNumber(Model.TotalAmount, 0) đ</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-12">
+                            <h3>Danh sách sản phẩm</h3>
+                        </div>
+                        <div class="col-12">
+                            @Html.Action("Partial_SanPham", "Review", new { id = Model.Id })
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+
+                </div>
+                <!-- /.card-footer-->
+            </div>
+            <!-- /.card -->
+
+        </section>
+        <!-- /.content -->
+    </div>
+</div>

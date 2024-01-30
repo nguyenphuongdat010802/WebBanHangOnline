@@ -1,0 +1,333 @@
+﻿
+@{
+    ViewBag.Title = "Thống kê";
+}
+
+
+@section naviheader{
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin/home" class="nav-link">Trang chủ</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin/Statistical" class="nav-link">@ViewBag.Title</a>
+        </li>
+    </ul>
+}
+
+
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Thống kê</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Thống kê</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+
+
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        @*<div class="card-header">
+            <h3 class="card-title">Thống kê danh thu</h3>
+
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>*@
+        <div class="card-header" style="background: #333; color: #ffffff;">
+            <h3 class="card-title" >Thống kê danh thu</h3>
+
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="chart">
+                        <canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                    </div>
+
+
+
+
+
+                    <!-- Biểu đồ hình tròn -->
+                    <div class="card-body">
+                        <canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 572px;" width="715" height="312" class="chartjs-render-monitor"></canvas>
+                    </div>
+
+
+
+
+
+                </div>
+                <div class="col-md-4">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Ngày</th>
+                                <th>Doanh thu</th>
+                                <th>Lợi nhuận</th>
+                            </tr>
+                        </thead>
+                        <tbody id="load_data"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+        <!-- Thêm một canvas cho biểu đồ bánh lợi nhuận -->
+        @*<div class="col-md-4">
+            <div class="chart">
+                <canvas id="doughnutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+            </div>
+        </div>*@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- /.card-body -->
+        <div class="card-footer">
+            @*Footer*@
+        </div>
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+
+</section>
+<!-- /.content -->
+@section scripts{
+
+    <script src="~/Content/clients/plugins/chart.js/Chart.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
+    <script src="~/Content/assets/plugins/moment/moment.min.js"></script>
+    <script>
+
+
+        //thử nghiệm chức năng bánh thông kê sản phẩm bán chạy nhất
+        var barChartData;
+        var barChartOptions;
+
+
+
+
+        $(function () {
+            /* ChartJS
+             * -------
+             * Here we will create a few charts using ChartJS
+             */
+
+            var arrDoanhThu = [];
+            var arrLoiNhuan = [];
+            var arrDate = [];
+            $.ajax({
+                url: '/Statistical/GetStatistical',
+                type: 'GET',
+                data: { fromDate: '', toDate: '' },
+                success: function (rs) {
+
+                    $.each(rs.Data, function (i, item) {
+                        var strDate = moment(item.Date).format('DD/MM/yyyy');
+                        arrDate.push(strDate);
+                        arrDoanhThu.push(item.DoanhThu);
+                        arrLoiNhuan.push(item.LoiNhuan);
+                    });
+                    var areaChartData = {
+                        labels: arrDate,
+                        datasets: [
+                            {
+                                label: 'Lợi nhuận',
+                                /*backgroundColor: 'rgba(60,141,188,0.9)',*/
+                                backgroundColor: 'rgba(255, 193, 7, 0.9)', // Màu vàng
+                                borderColor: 'rgba(60,141,188,0.8)',
+                                pointRadius: false,
+                                pointColor: '#3b8bba',
+                                pointStrokeColor: 'rgba(60,141,188,1)',
+                                pointHighlightFill: '#fff',
+                                pointHighlightStroke: 'rgba(60,141,188,1)',
+                                data: arrLoiNhuan
+                            },
+                            {
+                                label: 'Danh thu',
+                                /*backgroundColor: 'rgba(210, 214, 222, 1)',*/
+                                backgroundColor: 'rgba(138, 43, 226, 0.9)', // Màu tím
+                                borderColor: 'rgba(210, 214, 222, 1)',
+                                pointRadius: false,
+                                pointColor: 'rgba(210, 214, 222, 1)',
+                                pointStrokeColor: '#c1c7d1',
+                                pointHighlightFill: '#fff',
+                                pointHighlightStroke: 'rgba(220,220,220,1)',
+                                data: arrDoanhThu
+                            },
+                        ]
+                    }
+                    //-------------
+                    //- BAR CHART -
+                    //-------------
+                    var barChartCanvas = $('#barChart').get(0).getContext('2d')
+                    var barChartData = $.extend(true, {}, areaChartData)
+                    var temp0 = areaChartData.datasets[0]
+                    var temp1 = areaChartData.datasets[1]
+                    barChartData.datasets[0] = temp1
+                    barChartData.datasets[1] = temp0
+
+                    var barChartOptions = {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        datasetFill: false
+                    }
+
+                    new Chart(barChartCanvas, {
+                        type: 'bar',
+                        data: barChartData,
+                        options: barChartOptions
+                    });
+
+
+                    // //Gọi hàm hiển thị thông tin sản phẩm bán chạy nhất
+                    displayTopSellingProducts();
+
+
+
+
+
+                    load_data(rs.Data);
+                }
+            });
+
+
+
+
+
+            //////////////////////
+            // Hàm hiển thị thông tin sản phẩm bán chạy nhất
+            function displayTopSellingProducts() {
+                $.ajax({
+                    url: '/Statistical/GetTopSellingProducts',
+                    type: 'GET',
+                    data: { count: 10000 },
+                    success: function (response) {
+                        var topSellingProducts = response.Data;
+
+                        // Xử lý dữ liệu và cấu hình biểu đồ hình tròn ở đây
+                        console.log(topSellingProducts);
+
+                        var pieChartData = {
+                            labels: topSellingProducts.map(product => product.ProductName),
+                            datasets: [{
+                                data: topSellingProducts.map(product => product.TotalQuantity),
+                                backgroundColor: ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc'],
+                            }],
+                        };
+
+                        var pieChartOptions = {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                        };
+
+                        // Lưu ý rằng đoạn mã đã thay đổi ở đây, sử dụng 'getContext()' thay vì 'get(0).getContext('2d')'
+                        var pieChartCanvas = document.getElementById('pieChart').getContext('2d');
+
+                        new Chart(pieChartCanvas, {
+                            type: 'pie',
+                            data: pieChartData,
+                            options: pieChartOptions,
+                        });
+                    }
+                });
+            }
+            function updateProductQuantity(productId, quantity) {
+                $.ajax({
+                    url: '/Statistical/UpdateProductQuantity',
+                    type: 'POST',
+                    data: { productId: productId, quantity: quantity },
+                    success: function (response) {
+                        if (response.Success) {
+                            console.log('Cập nhật số lượng thành công.');
+                        } else {
+                            console.error('Có lỗi khi cập nhật số lượng:', response.Message);
+                        }
+                    },
+                    error: function (error) {
+                        console.error('Lỗi khi gửi yêu cầu cập nhật số lượng:', error);
+                    }
+                });
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+        })
+
+        function load_data(data) {
+            var strHtml = "";
+            $.each(data, function (i, item) {
+                var strDate = moment(item.Date).format('DD/MM/yyyy');
+                strHtml += "<tr>";
+                strHtml += "<td>" + (i + 1) + "</td>";
+                strHtml += "<td>" + strDate + "</td>";
+                strHtml += "<td>" + item.DoanhThu + "</td>";
+                strHtml += "<td>" + item.LoiNhuan + "</td>";
+                strHtml += "</tr>";
+            });
+            $('#load_data').html(strHtml);
+        }
+    </script>
+}

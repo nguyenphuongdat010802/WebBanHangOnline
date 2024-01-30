@@ -1,0 +1,179 @@
+﻿@model WebBanHangOnline.Models.LoginViewModel
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutLogin.cshtml";
+
+
+}
+
+
+
+<style>
+    .custom-btn {
+        width: 38px;
+        height: 38px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .icon {
+        font-size: 16px;
+    }
+
+    .input-group .custom-btn {
+        margin-left: -1px;
+    }
+
+    .input-group-text {
+        padding: 0; /* Điều chỉnh padding để không làm tăng kích thước của input-group */
+    }
+
+
+    body {
+        margin: 0;
+        padding: 0;
+        background-image: url('đường_dẫn_ảnh_của_bạn.jpg');
+        background-size: cover;
+        background-position: center;
+        font-family: 'Roboto', sans-serif; /* Thay thế bằng font chữ mong muốn */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+
+    .MuiPaper-root {
+        /* Thêm các quy tắc CSS bạn muốn cho phần nền này */
+        background-color: rgba(255, 255, 255, 0.8); /* Một ví dụ về màu nền */
+        padding: 20px; /* Các giá trị padding tùy thuộc vào nhu cầu của bạn */
+        border-radius: 8px; /* Bo góc */
+    }
+</style>
+
+
+
+
+<div class="card-body login-card-body">
+
+    <p class="login-box-msg">Đăng nhập để truy cập vào website Admin</p>
+    @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true);
+
+        <label for="exampleInputEmail1" class="form-label">Username</label>
+
+        <div class="input-group mb-3">
+
+            @Html.TextBoxFor(x => x.UserName, new { @class = "form-control", @placeholder = "Nhập tài khoản" })
+            <div class="input-group-append">
+                @*<div class="input-group-text">
+                        <span class="fas fa-envelope"></span>
+                    </div>*@
+
+                @*<div class="custom-btn" style="width: 30px; height: 30px;">
+                        <span class="fas fa-envelope icon"></span>
+                    </div>*@
+                <div class="custom-btn">
+                    <span class="fas fa-envelope icon"></span>
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        /*
+        <div class="input-group mb-3">
+            @Html.TextBoxFor(x => x.Password, new { @class = "form-control", @placeholder = "Mật khẩu" })
+            <input type="password" class="form-control" placeholder="Password">
+            <div class="input-group-append">
+                <div class="input-group-text">
+                    <span class="fas fa-lock"></span>
+                </div>
+            </div>
+        </div>
+        */
+
+
+        <label for="exampleInputPassword1" class="form-label">Password</label>
+        <div class="input-group mb-3">
+            @Html.TextBoxFor(x => x.Password, new { @class = "form-control", @placeholder = "Nhập mật khẩu", @type = "password", id = "Password" })
+            <div class="input-group-append">
+                <div class="custom-btn" id="togglePassword">
+                    <span class="icon" id="eyeIcon">&#x1F441;</span>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+        <div class="row">
+            <div class="col-8">
+                <div class="icheck-primary">
+                    @*<input type="checkbox" id="remember">*@
+                    @Html.CheckBoxFor(x => x.RememberMe)
+                    <label for="remember">
+                        Remember Me
+                    </label>
+                </div>
+            </div>
+            <!-- /.col -->
+            <div class="col-4">
+                <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+            </div>
+            <!-- /.col -->
+        </div>
+    }
+
+
+    <!-- /.social-auth-links -->
+    @*<p class="mb-1">
+            <a href="#">I forgot my password</a>
+        </p>*@
+
+
+    @*<p class="mb-0">
+            <a href="register.html" class="text-center">Register a new membership</a>
+        </p>*@
+
+
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous" />
+
+
+
+
+<script>
+    $(document).ready(function () {
+        $("#togglePassword").click(function () {
+            console.log("Button Clicked");
+            var passwordField = $("#Password");
+            var passwordFieldType = passwordField.attr("type");
+            var newPasswordFieldType = passwordFieldType === "password" ? "text" : "password";
+            passwordField.attr("type", newPasswordFieldType);
+
+            var eyeIcon = $("#eyeIcon");
+            var eyeIconText = newPasswordFieldType === "password" ? "\u{1F441}" : "\u{1F576}";
+            eyeIcon.html(eyeIconText);
+        });
+    });
+
+
+</script>
+
+
+

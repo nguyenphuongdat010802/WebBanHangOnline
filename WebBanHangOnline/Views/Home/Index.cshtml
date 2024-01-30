@@ -1,0 +1,238 @@
+﻿@{
+    ViewBag.Title = "Shop Online";
+    ViewBag.SeoDescription = "Shop Online";
+}
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css">
+<!-- Slider -->
+
+<div class="main_slider" id="mainSlider">
+    <div class="container fill_height">
+        <div class="row align-items-center fill_height">
+            <div class="col">
+                <div class="main_slider_content">
+                    @*<h6>
+                            <font color="white">Sản phẩm mới nhất đến năm 2023</font>
+                        </h6>
+                        <h1>
+                            <font color="white" >Shop bán mô hình đồ chơi</font>
+                        </h1>*@
+
+                    <style>
+                        .custom-text {
+                            color: white;
+                            padding: 10px;
+                            text-shadow: 2px 2px 2px red; /* Độ dày và màu của viền */
+                        }
+                    </style>
+
+                    <h6 class="custom-text">Sản phẩm mới nhất đến năm 2023</h6>
+                    <h1 class="custom-text">Shop bán mô hình đồ chơi</h1>
+
+
+
+
+                    <div class="red_button shop_now_button"><a href="/san-pham">shop now</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .main_slider {
+        background-image: url('/Content/assets/images/one_piece.jpg');
+        width: 100%; /* Chiều rộng của khung */
+        height: 700px; /* Chiều cao của khung */
+        overflow: hidden; /* Ẩn các phần bị tràn ra ngoài khung */
+    }
+
+        .main_slider .container {
+            height: 100%; /* Chiều cao của khối container để lấp đầy khung */
+        }
+
+        .main_slider .slider_image {
+            width: 100%;
+            height: 100%;
+            background-size: cover; /* Kích thước ảnh tự động điều chỉnh để khớp với khung */
+            background-position: center; /* Canh giữa hình ảnh */
+            background-repeat: no-repeat; /* Không lặp lại ảnh */
+        }
+</style>
+
+
+<script>
+    var images = [
+        '/Content/assets/images/one_piece.jpg',
+        '/Content/assets/images/naruto.png',
+        '/Content/assets/images/DragonBallOK02.jpg',
+        '/Content/assets/images/bleach.jpg'
+
+    ];
+    var currentIndex = 0;
+    var mainSlider = document.getElementById('mainSlider');
+
+    function changeImage() {
+        mainSlider.style.backgroundImage = 'url(' + images[currentIndex] + ')';
+        currentIndex = (currentIndex + 1) % images.length;
+    }
+
+    setInterval(changeImage, 2000); // Chuyển đổi ảnh sau mỗi 3 giây (3000ms)
+</script>
+
+
+@*<style>
+        .main_slider {
+            background-image: url('/Content/assets/images/ps5_vs.png');
+            /* Thay đổi kích thước, vị trí và các thuộc tính khác của slider tại đây */
+        }
+    </style>*@
+
+@*<script>
+        var images = [
+            '/Content/assets/images/ps5_vs.png'
+            //'/Content/assets/images/gameps5.png',
+            //'/Content/assets/images/Best-Open-World-PS5-Games.jpg'
+
+
+        ];
+        var currentIndex = 0;
+        var mainSlider = document.getElementById('mainSlider');
+
+        function changeImage() {
+            mainSlider.style.backgroundImage = 'url(' + images[currentIndex] + ')';
+            currentIndex = (currentIndex + 1) % images.length;
+        }
+
+        setInterval(changeImage, 2000); // Chuyển đổi ảnh sau mỗi 3 giây (3000ms)
+    </script>*@
+
+
+
+@*<div class="main_slider" style="background-image:url(Content/assets/images/ps5_vs.png)">
+        <div class="container fill_height">
+            <div class="row align-items-center fill_height">
+                <div class="col">
+                    <div class="main_slider_content">
+                        <h6>
+                            <font color="white">Sản phẩm mới nhất đến năm 2023</font>
+                        </h6>
+                        <h1>
+                            <font color="white">Shop bán đĩa game</font>
+                        </h1>
+                        <div class="red_button shop_now_button"><a href="/san-pham">shop now</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+<!-- Banner -->
+@*danh mục sản phẩm -> nhấn vào chuyển qua trang sản phẩm*@
+@Html.Action("MenuProductCategory", "Menu")
+
+
+
+<!-- New Arrivals -->
+@*danh sách sản phẩm -> hiện danh sách các sản phẩm*@
+<div class="new_arrivals">
+    <div class="container">
+        @Html.Action("MenuArrivals", "Menu")
+    </div>
+</div>
+
+<!-- Deal of the week -->
+@*<div class="deal_ofthe_week">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="deal_ofthe_week_img">
+                        <img src="~/Content/assets/images/deal_ofthe_week.png" alt="">
+                    </div>
+                </div>
+                <div class="col-lg-6 text-right deal_ofthe_week_col">
+                    <div class="deal_ofthe_week_content d-flex flex-column align-items-center float-right">
+                        <div class="section_title">
+                            <h2>Deal Of The Week</h2>
+                        </div>
+                        <ul class="timer">
+                            <li class="d-inline-flex flex-column justify-content-center align-items-center">
+                                <div id="day" class="timer_num">03</div>
+                                <div class="timer_unit">Day</div>
+                            </li>
+                            <li class="d-inline-flex flex-column justify-content-center align-items-center">
+                                <div id="hour" class="timer_num">15</div>
+                                <div class="timer_unit">Hours</div>
+                            </li>
+                            <li class="d-inline-flex flex-column justify-content-center align-items-center">
+                                <div id="minute" class="timer_num">45</div>
+                                <div class="timer_unit">Mins</div>
+                            </li>
+                            <li class="d-inline-flex flex-column justify-content-center align-items-center">
+                                <div id="second" class="timer_num">23</div>
+                                <div class="timer_unit">Sec</div>
+                            </li>
+                        </ul>
+                        <div class="red_button deal_ofthe_week_button"><a href="#">shop now</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+<!-- Best Sellers -->
+@*Hiển thị các sản phẩm đang Sales*@
+@Html.Action("Partial_ProductSales", "Products")
+
+@*Hiển thị các sản phẩm Hot*@
+@Html.Action("Partial_ProductHot", "Products")
+
+
+
+
+<!-- Benefit -->
+
+<div class="benefit">
+    <div class="container">
+        <div class="row benefit_row">
+            <div class="col-lg-3 benefit_col">
+                <div class="benefit_item d-flex flex-row align-items-center">
+                    <div class="benefit_icon"><i class="fa fa-truck" aria-hidden="true"></i></div>
+                    <div class="benefit_content">
+                        <h6>vận chuyển</h6>
+                        <p>Miễn phí vận chuyển toàn quốc</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 benefit_col">
+                <div class="benefit_item d-flex flex-row align-items-center">
+                    <div class="benefit_icon"><i class="fa fa-money" aria-hidden="true"></i></div>
+                    <div class="benefit_content">
+                        <h6>Thanh toán</h6>
+                        <p>Trực tiếp hoặc website</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 benefit_col">
+                <div class="benefit_item d-flex flex-row align-items-center">
+                    <div class="benefit_icon"><i class="fa fa-undo" aria-hidden="true"></i></div>
+                    <div class="benefit_content">
+                        <h6>Hoàn trả</h6>
+                        <p>Trong 30 ngày từ khi nhận hàng</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 benefit_col">
+                <div class="benefit_item d-flex flex-row align-items-center">
+                    <div class="benefit_icon"><i class="fa fa-clock-o" aria-hidden="true"></i></div>
+                    <div class="benefit_content">
+                        <h6>Mở cửa</h6>
+                        <p>8AM - 22PM</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Blogs -->
+@Html.Action("Partial_News_Home", "News")

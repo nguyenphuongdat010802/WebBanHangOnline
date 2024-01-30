@@ -1,0 +1,131 @@
+﻿@model IEnumerable<WebBanHangOnline.Models.EF.Product>
+
+
+
+@if (Model != null && Model.Any())
+{
+    foreach (var item in Model)
+    {
+        <!-- Product 1 -->
+        var strImge = "";
+        var img = item.ProductImage.FirstOrDefault(x => x.IsDefault);
+        if (img != null)
+        {
+            strImge = img.Image;
+        }
+        var wishlist = item.Wishlists.FirstOrDefault(x => x.UserName == User.Identity.Name);
+        var isWishlist = false;
+        if (wishlist != null)
+        {
+            isWishlist = true;
+        }
+        <div class="product-item @item.ProductCategory.Alias">
+            <div class="product discount product_filter">
+                @*<div class="product_image">
+                        <img src="@strImge" alt="@item.Title">
+                    </div>*@
+                <div class="product_image" style="position: relative; width: 222px; height: 240px; overflow: hidden;">
+                    <img src="@strImge" alt="@item.Title" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;">
+                </div>
+
+
+                @if (isWishlist == true)
+                {
+                    <div data-id="@item.Id" class="favorite favorite_left active"></div>
+                }
+                else
+                {
+                    <div data-id="@item.Id" class="favorite favorite_left"></div>
+                }
+
+                @if (item.PriceSale > 0)
+                {
+                    <div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span>sale</span></div>
+                }
+
+                <!--<div class="product_info" style="width: 222px;">-->
+                @*<h6 class="product_name"><a href="/chi-tiet/@item.Alias-p@(item.Id)">@item.Title</a></h6>*@
+                <!--<h6 class="product_name" style="max-height: 60px; overflow: hidden;">
+                        <a href="/chi-tiet/@item.Alias-p@(item.Id)">@item.Title</a>
+                    </h6>
+
+                        @if (item.PriceSale > 0)
+                        {
+                            <div class="product_price">@WebBanHangOnline.Common.Common.FormatNumber(item.PriceSale, 0)<span>@WebBanHangOnline.Common.Common.FormatNumber(item.Price, 0)</span></div>
+
+                        }
+                        else
+                        {
+                            <div class="product_price">@WebBanHangOnline.Common.Common.FormatNumber(item.Price, 0)</div>
+                        }
+                </div>-->
+
+
+
+
+                <div class="product_item">
+                    <div class="product_info" style="width: 222px;">
+                        <h6 class="product_name" style="max-height: 60px; overflow: hidden;">
+                            <a href="/chi-tiet/@item.Alias-p@(item.Id)">@item.Title</a>
+                        </h6>
+
+                        @if (item.PriceSale > 0)
+                        {
+                            <div class="product_price">
+                                @WebBanHangOnline.Common.Common.FormatNumber(item.PriceSale, 0)<span>@WebBanHangOnline.Common.Common.FormatNumber(item.Price, 0)</span>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="product_price">
+                                @WebBanHangOnline.Common.Common.FormatNumber(item.Price, 0)
+                            </div>
+                        }
+
+                    </div>
+
+
+                </div>
+
+
+
+            </div>
+            <div class="red_button add_to_cart_button">
+                <a href="#" class="btnAddToCart" data-id="@item.Id">add to cart</a>
+            </div>
+            @*<div class="red_button add_to_cart_button"><a href="#" class="btnAddToCart" data-id="@item.Id">add to cart</a></div>*@
+        </div>
+    }
+}
+
+
+
+@*@section scripts {
+    <script>
+        $(document).ready(function () {
+            $(".btnAddToCart").click(function () {
+                var productId = $(this).data("id");
+
+                // Thực hiện ajax request để kiểm tra số lượng sản phẩm
+                $.ajax({
+                    url: '/CheckProductAvailability/' + productId, // Điều chỉnh URL theo đường dẫn thích hợp
+                    type: 'GET',
+                    success: function (response) {
+                        if (response.isAvailable) {
+                            // Số lượng sản phẩm > 0, thêm vào giỏ hàng
+                            alert("Sản phẩm đã được thêm vào giỏ hàng.");
+                        } else {
+                            // Số lượng sản phẩm = 0, hiển thị thông báo hết hàng
+                            alert("Sản phẩm đã hết hàng. Không thể thêm vào giỏ hàng.");
+                        }
+                    },
+                    error: function () {
+                        // Xử lý lỗi nếu cần thiết
+                        alert("Đã xảy ra lỗi khi kiểm tra số lượng sản phẩm.");
+                    }
+                });
+            });
+        });
+    </script>
+}*@
+

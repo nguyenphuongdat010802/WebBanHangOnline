@@ -1,0 +1,69 @@
+﻿@model IEnumerable<WebBanHangOnline.Models.EF.Order>
+@if (Model != null)
+{
+    var i = 1;
+    <h2>
+        Lịch sử mua hàng
+    </h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <td>STT</td>
+                <td>Mã Đơn hàng</td>
+                <td>Tổng tiền</td>
+                <td>Ngày đạt</td>
+                <td>Trạng thái</td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>@(Model.ToList().IndexOf(item) + 1)</td>
+                <td>@item.Code</td>
+                <td>@item.TotalAmount</td>
+                <td>@item.CreatedDate</td>
+                <td>
+                    @if (item.Status == 1)
+                    {
+                        <span>Chưa thanh toán</span>
+                    }
+                    @if (item.Status == 2)
+                    {
+                        <span>Đang giao</span>
+                    }
+                    @if (item.Status == 3)
+                    {
+                        <span>Đã thanh toán</span>
+                    }
+                    @if (item.Status == 4)
+                    {
+                        <span>Hoàn thành</span>
+                    }
+                </td>
+                <td>
+
+
+
+                    <a href="/Review/ViewCus/@item.Id" class="btn btn-sm btn-success">Xem</a>
+
+
+
+
+                </td>
+            </tr>
+            }
+
+
+            @*@foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.Code</td>
+                    </tr>
+                }*@
+        </tbody>
+    </table>
+}
